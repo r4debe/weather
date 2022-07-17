@@ -53,32 +53,33 @@ def run():
 
     # ...and for example, let's say we want to know Africa's ID...
     print(locations['Africa'])
-    # or Europe for that matter...
-    print(locations['Europe'])
-    print(locations['Asia'])
-    print(locations['North America'])
+    region_code = (locations['Africa'])
+    print (region_code)
     # ...and let's pretend the user specifed the value as a command-line
     # argument...
-    location = 'Central America'
-    print(locations[location])
+#    location = 'Central America'
+#    print(locations[location])
     # worth noting that what if the user specifed the location in lower-case?
     # we could add all the locations to the dict in lower-case, then convert
     # the user specifed location to lower-case too.
     # Starting to sound like how to store stuff in a database. No coincidence!
 
-    return api_endpoint, locations_path
+    return api_endpoint, region_code
 
 
-def concat_url(api_endpoint, locations_path):
+def concat_url(api_endpoint, countries_path, region_code):
     # Create the countries url.
-    country_url = (api_endpoint + '/' + locations_path)
+    contries_path = 'locations/v1/countries'
+    country_url = (api_endpoint + '/' + countries_path)
     print(country_url)
+    print(countries_path)
+    print(region_code)
     return 
 
-locations_path, api_endpoint = run()
-concat_url(locations_path,api_endpoint)
+api_endpoint, region_code = run()
+concat_url(api_endpoint, countries_path, region_code)
 
-#concat_url()
+# http://dataservice.accuweather.com/locations/v1/countries/{regionCode}
 
 # If our app is not running as a module, then call the run() fuction.
 if __name__ == '__main__':
