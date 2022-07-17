@@ -44,17 +44,17 @@ def run():
     apikey = ' 0xqgGVtvplLlUIsbxfIOEVGkxz9lMpYO'
 
     # Define the api path for getting locations.
-    locations_path = 'locations/v1/regions'
-    contries_path = 'locations/v1/countries'
+    regions_path = 'locations/v1/regions'
+    countries_path = 'locations/v1/countries'
 
     # Here we call the get_locations() function passing in the locations url
     # and api key.
-    locations = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, locations_path, apikey))
+    regions = get_locations('{}/{}?apikey={}'.format(
+        api_endpoint, regions_path, apikey))
 
     # ...and for example, let's say we want to know Africa's ID...
    # print(locations['Africa'])
-    region_code = (locations['Africa'])
+    region_code = (regions['Europe'])
     print (region_code)
     # ...and let's pretend the user specifed the value as a command-line
     # argument...
@@ -65,6 +65,13 @@ def run():
     # the user specifed location to lower-case too.
     # Starting to sound like how to store stuff in a database. No coincidence!
 
+    countries = get_locations('{}/{}?apikey={}'.format(
+        api_endpoint, countries_path, apikey))
+    
+#    print (countries)
+    
+    country_code = (countries['Italy'])
+    print (country_code)
     return
 
 
