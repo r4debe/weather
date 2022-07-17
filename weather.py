@@ -66,17 +66,19 @@ def run():
     # the user specifed location to lower-case too.
     # Starting to sound like how to store stuff in a database. No coincidence!
 
-    return
+    return api_endpoint, locations_path
 
 
-def concat_url(str):
+def concat_url(api_endpoint, locations_path):
     # Create the countries url.
     country_url = (api_endpoint,locations_path)
-    print (country_url)
-    print (locations_path)
+    print(country_url)
     return 
 
-concat_url( str = (api_endpoint, locations_path))
+locations_path, api_endpoint = run()
+concat_url(locations_path,api_endpoint)
+
+#concat_url()
 
 # If our app is not running as a module, then call the run() fuction.
 if __name__ == '__main__':
