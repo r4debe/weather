@@ -41,10 +41,11 @@ def run():
 
     # Define our api key. This is sensitive data, so we should consider passing
     # it in as a flag, or reading from the environment.
-    apikey = 'bTWRzyxjP94K3Wn66NlQsr3h2qppp3cs'
+    apikey = ' 0xqgGVtvplLlUIsbxfIOEVGkxz9lMpYO'
 
     # Define the api path for getting locations.
     locations_path = 'locations/v1/regions'
+    contries_path = 'locations/v1/countries'
 
     # Here we call the get_locations() function passing in the locations url
     # and api key.
@@ -52,32 +53,31 @@ def run():
         api_endpoint, locations_path, apikey))
 
     # ...and for example, let's say we want to know Africa's ID...
-    print(locations['Africa'])
+   # print(locations['Africa'])
     region_code = (locations['Africa'])
     print (region_code)
     # ...and let's pretend the user specifed the value as a command-line
     # argument...
-#    location = 'Central America'
-#    print(locations[location])
+ #   location = 'Central America'
+ #   print(locations[location])
     # worth noting that what if the user specifed the location in lower-case?
     # we could add all the locations to the dict in lower-case, then convert
     # the user specifed location to lower-case too.
     # Starting to sound like how to store stuff in a database. No coincidence!
 
-    return api_endpoint, region_code
+    return
 
 
-def concat_url(api_endpoint, countries_path, region_code):
-    # Create the countries url.
-    contries_path = 'locations/v1/countries'
-    country_url = (api_endpoint + '/' + countries_path)
-    print(country_url)
-    print(countries_path)
-    print(region_code)
-    return 
+#def concat_url(api_endpoint, countries_path, region_code):
+#    # Create the countries url.
+#    country_url = (api_endpoint + countries_path)
+#    print(country_url)
+#    print(countries_path)
+#    print(region_code)
+#    return 
 
-api_endpoint, region_code = run()
-concat_url(api_endpoint, countries_path, region_code)
+#api_endpoint, region_code, counries_path = run()
+#concat_url(api_endpoint, countries_path, region_code)
 
 # http://dataservice.accuweather.com/locations/v1/countries/{regionCode}
 
