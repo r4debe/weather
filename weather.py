@@ -71,7 +71,7 @@ def run():
 
 def concat_url(api_endpoint, locations_path):
     # Create the countries url.
-    country_url = (api_endpoint,locations_path)
+    country_url = (api_endpoint + locations_path)
     print(country_url)
     return 
 
