@@ -45,7 +45,6 @@ def run():
 
     # Define the api path for getting locations.
     regions_path = 'locations/v1/regions'
-    countries_path = 'locations/v1/countries'
 
     # Here we call the get_locations() function passing in the locations url
     # and api key.
@@ -64,29 +63,25 @@ def run():
     # we could add all the locations to the dict in lower-case, then convert
     # the user specifed location to lower-case too.
     # Starting to sound like how to store stuff in a database. No coincidence!
+    countries_path = 'locations/v1/countries'
 
     countries = get_locations('{}/{}?apikey={}'.format(
         api_endpoint, countries_path, apikey))
     
-#    print (countries)
-    
     country_code = (countries['Italy'])
     print (country_code)
+
+    admin_areas_path = 'locations/v1/adminareas'
+
+    admin_areas = get_locations('{}/{}?apikey={}'.format(
+        api_endpoint, admin_areas_path, apikey))
+    
+    admin_area_code = (admin_areas['Leeds'])
+    print (admin_area_code)
     return
-
-
-#def concat_url(api_endpoint, countries_path, region_code):
-#    # Create the countries url.
-#    country_url = (api_endpoint + countries_path)
-#    print(country_url)
-#    print(countries_path)
-#    print(region_code)
-#    return 
 
 #api_endpoint, region_code, counries_path = run()
 #concat_url(api_endpoint, countries_path, region_code)
-
-# http://dataservice.accuweather.com/locations/v1/countries/{regionCode}
 
 # If our app is not running as a module, then call the run() fuction.
 if __name__ == '__main__':
