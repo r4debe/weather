@@ -78,7 +78,16 @@ def run():
     
     admin_area_code = (admin_areas['Leeds'])
     print (admin_area_code)
+
+    current_conditions_path = 'currentconditions/v1/'
+    current_conditions = get_locations('{}/{}?apikey={}'.format(
+        api_endpoint, current_conditions_path, admin_area_code, apikey))
+    
+    print (current_conditions)
+
     return
+
+#http://dataservice.accuweather.com/currentconditions/v1/{locationKey}
 
 #api_endpoint, region_code, counries_path = run()
 #concat_url(api_endpoint, countries_path, region_code)
