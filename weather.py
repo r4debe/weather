@@ -82,13 +82,13 @@ def run():
 
 #http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
 
-#    conditions_path = 'currentconditions/v1'
-#    location_key = '712327'
-#
-#    weather = (requests.get('{}/{}/{}?apikey={}'.format(
-#        api_endpoint, conditions_path, location_key, apikey)))
-#
-#    print (weather)
+    conditions_path = 'currentconditions/v1'
+    location_key = '712327'
+
+    weather = (requests.get('{}/{}/{}?apikey={}'.format(
+        api_endpoint, conditions_path, location_key, apikey)))
+
+    print (weather)
 
 
     return
