@@ -41,10 +41,10 @@ def run():
 
     # Define our api key. This is sensitive data, so we should consider passing
     # it in as a flag, or reading from the environment.
-    apikey = ' 0xqgGVtvplLlUIsbxfIOEVGkxz9lMpYO'
+    apikey = 'Y1HInAn84tkJVg1goICCfpgb2396Kq5t'
 
     # Define the api path for getting locations.
-    regions_path = 'locations/v1/regions'
+    regions_path = 'locations/v1/regions/'
 
     # Here we call the get_locations() function passing in the locations url
     # and api key.
@@ -54,7 +54,7 @@ def run():
     # ...and for example, let's say we want to know Africa's ID...
    # print(locations['Africa'])
     region_code = (regions['Europe'])
-    print (region_code)
+    print ("Region = " + region_code)
     # ...and let's pretend the user specifed the value as a command-line
     # argument...
  #   location = 'Central America'
@@ -63,13 +63,14 @@ def run():
     # we could add all the locations to the dict in lower-case, then convert
     # the user specifed location to lower-case too.
     # Starting to sound like how to store stuff in a database. No coincidence!
-    countries_path = 'locations/v1/countries'
+    countries_path = 'locations/v1/countries/'
 
-    countries = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, countries_path, apikey))
+    countries = get_locations('{}/{}/{}?apikey={}'.format(
+        api_endpoint, countries_path, region_code, apikey))
     
     country_code = (countries['Italy'])
-    print (country_code)
+    print ("Country = " + country_code)
+
 
     admin_areas_path = 'locations/v1/adminareas'
 
@@ -79,14 +80,19 @@ def run():
     admin_area_code = (admin_areas['Leeds'])
     print (admin_area_code)
 
-    current_conditions_path = 'currentconditions/v1/'
-    current_conditions = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, current_conditions_path, admin_area_code, apikey))
+#http://dataservice.accuweather.com/locations/v1/adminareas/{countryCode}
+
+    conditions_path = 'currentconditions/v1/'
+
+    conditions = get_locations('{}/{}?apikey={}'.format(
+        api_endpoint, conditions_path, apikey))
     
+    current_conditions = (conditions['LDS'])
     print (current_conditions)
 
     return
 
+#Current conditions url
 #http://dataservice.accuweather.com/currentconditions/v1/{locationKey}
 
 #api_endpoint, region_code, counries_path = run()
