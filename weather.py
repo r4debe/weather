@@ -41,7 +41,7 @@ def run():
 
     # Define our api key. This is sensitive data, so we should consider passing
     # it in as a flag, or reading from the environment.
-    apikey = 'Y1HInAn84tkJVg1goICCfpgb2396Kq5t'
+    apikey = 'k9FOWFvXGHmamB2yZnLBmxNan0lGvsZx'
 
     # Define the api path for getting locations.
     regions_path = 'locations/v1/regions/'
@@ -80,20 +80,18 @@ def run():
     admin_area_code = (admin_areas['Leeds'])
     print (admin_area_code)
 
-#http://dataservice.accuweather.com/locations/v1/adminareas/{countryCode}
+#http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
 
-    conditions_path = 'currentconditions/v1/'
+#    conditions_path = 'currentconditions/v1'
+#    location_key = '712327'
+#
+#    weather = (requests.get('{}/{}/{}?apikey={}'.format(
+#        api_endpoint, conditions_path, location_key, apikey)))
+#
+#    print (weather)
 
-    conditions = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, conditions_path, apikey))
-    
-    current_conditions = (conditions['LDS'])
-    print (current_conditions)
 
     return
-
-#Current conditions url
-#http://dataservice.accuweather.com/currentconditions/v1/{locationKey}
 
 #api_endpoint, region_code, counries_path = run()
 #concat_url(api_endpoint, countries_path, region_code)
