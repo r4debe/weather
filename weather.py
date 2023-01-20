@@ -34,6 +34,18 @@ def get_locations(url):
 
     return d
 
+def get_weather(url):
+    resp = requests.get(url)
+
+    if resp.status_code != 200:
+        print(resp.status_code)
+        return None
+    
+    e = {}
+
+    e = json.loads(resp.text)
+
+    return e
 
 def run():
     # Define the api endpoint.
@@ -85,8 +97,8 @@ def run():
     conditions_path = 'currentconditions/v1'
     location_key = '712327'
 
-    weather = (requests.get('{}/{}/{}?apikey={}'.format(
-        api_endpoint, conditions_path, location_key, apikey)))
+    weather = get_weather('{}/{}/{}?apikey={}'.format(
+        api_endpoint, conditions_path, location_key, apikey))
 
     print (weather)
 
