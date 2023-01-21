@@ -43,7 +43,8 @@ def get_weather(url):
     
     e = {}
 
-    e = json.loads(resp.text)
+    for item in json.loads(resp.text):
+        e[item['LocalizedName']] = item['ID']
 
     return e
 
@@ -53,7 +54,7 @@ def run():
 
     # Define our api key. This is sensitive data, so we should consider passing
     # it in as a flag, or reading from the environment.
-    apikey = 'k9FOWFvXGHmamB2yZnLBmxNan0lGvsZx'
+    apikey = 'e5LYcqeWw8S6tU512Zk4sj4zwBNJ9fTP'
 
     # Define the api path for getting locations.
     regions_path = 'locations/v1/regions/'
@@ -82,7 +83,7 @@ def run():
     
     country_code = (countries['Italy'])
     print ("Country = " + country_code)
-
+    print (countries)
 
     admin_areas_path = 'locations/v1/adminareas'
 
@@ -91,17 +92,16 @@ def run():
     
     admin_area_code = (admin_areas['Leeds'])
     print (admin_area_code)
-
 #http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
 
     conditions_path = 'currentconditions/v1'
     location_key = '712327'
 
-    weather = get_weather('{}/{}/{}?apikey={}'.format(
+    weather = get_locations('{}/{}/{}?apikey={}'.format(
         api_endpoint, conditions_path, location_key, apikey))
 
-    print (weather)
-
+    current_weather = (weather['WeatherText'])
+    print (current_weather)
 
     return
 
