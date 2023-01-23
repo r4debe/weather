@@ -43,39 +43,30 @@ def get_weather(url):
     
     e = {}
 
-    for item in json.loads(resp.text):
+    output = json.loads(resp.text)[0]
+    print (output)
+    for item in json.loads(resp.text)[0]:
         e[item['LocalizedName']] = item['ID']
 
     return e
 
 def run():
-    # Define the api endpoint.
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    # Define our api key. This is sensitive data, so we should consider passing
-    # it in as a flag, or reading from the environment.
-    apikey = 'e5LYcqeWw8S6tU512Zk4sj4zwBNJ9fTP'
+    apikey = 'oHmEETK5sv4cfGktbnAVJRDyp0FsDBn8'
 
-    # Define the api path for getting locations.
+# Region
     regions_path = 'locations/v1/regions/'
 
-    # Here we call the get_locations() function passing in the locations url
-    # and api key.
     regions = get_locations('{}/{}?apikey={}'.format(
         api_endpoint, regions_path, apikey))
 
-    # ...and for example, let's say we want to know Africa's ID...
-   # print(locations['Africa'])
     region_code = (regions['Europe'])
     print ("Region = " + region_code)
-    # ...and let's pretend the user specifed the value as a command-line
-    # argument...
- #   location = 'Central America'
- #   print(locations[location])
-    # worth noting that what if the user specifed the location in lower-case?
-    # we could add all the locations to the dict in lower-case, then convert
-    # the user specifed location to lower-case too.
-    # Starting to sound like how to store stuff in a database. No coincidence!
+
+# if user use lower case,  we could add all the locations to the dict in lower-case, then convert
+
+# Country
     countries_path = 'locations/v1/countries/'
 
     countries = get_locations('{}/{}/{}?apikey={}'.format(
@@ -85,6 +76,7 @@ def run():
     print ("Country = " + country_code)
     print (countries)
 
+# Admin area
     admin_areas_path = 'locations/v1/adminareas'
 
     admin_areas = get_locations('{}/{}?apikey={}'.format(
@@ -92,21 +84,19 @@ def run():
     
     admin_area_code = (admin_areas['Leeds'])
     print (admin_area_code)
-#http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
+
+# Current conditions url http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
 
     conditions_path = 'currentconditions/v1'
     location_key = '712327'
 
-    weather = get_locations('{}/{}/{}?apikey={}'.format(
+    weather = get_weather('{}/{}/{}?apikey={}'.format(
         api_endpoint, conditions_path, location_key, apikey))
 
     current_weather = (weather['WeatherText'])
     print (current_weather)
 
     return
-
-#api_endpoint, region_code, counries_path = run()
-#concat_url(api_endpoint, countries_path, region_code)
 
 # If our app is not running as a module, then call the run() fuction.
 if __name__ == '__main__':
