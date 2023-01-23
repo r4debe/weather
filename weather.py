@@ -45,8 +45,7 @@ def get_weather(url):
 
     output = json.loads(resp.text)[0]
     print (output)
-    for item in json.loads(resp.text)[0]:
-        e[item['LocalizedName']] = item['ID']
+    e = json.loads(resp.text)[0]
 
     return e
 
