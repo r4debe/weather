@@ -44,15 +44,13 @@ def get_weather(url):
     e = {}
 
     output = json.loads(resp.text)[0]
-    print (output)
     e = json.loads(resp.text)[0]
-
     return e
 
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    apikey = 'oHmEETK5sv4cfGktbnAVJRDyp0FsDBn8'
+    apikey = 'L2oOt2u6LGHbNUMVOE4dKlM2hiLcOlJU'
 
 # Region
     regions_path = 'locations/v1/regions/'
@@ -73,7 +71,6 @@ def run():
     
     country_code = (countries['Italy'])
     print ("Country = " + country_code)
-    print (countries)
 
 # Admin area
     admin_areas_path = 'locations/v1/adminareas'
@@ -92,7 +89,7 @@ def run():
     weather = get_weather('{}/{}/{}?apikey={}'.format(
         api_endpoint, conditions_path, location_key, apikey))
 
-    current_weather = (weather['WeatherText'])
+    current_weather = (weather['Temperature']['Metric']['Value'])
     print (current_weather)
 
     return
