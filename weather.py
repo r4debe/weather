@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from dataclasses import dataclass
+import dacite
 import json
 import requests
 import sys
@@ -36,29 +38,45 @@ def get_locations(url):
     return d
 
 
-def make_request(url):
-    print("make_request()")
-    resp = requests.get(url)
+#def make_request(url):
+#    print("make_request()")
+##    resp = requests.get(url)
+#
+#    if resp.status_code != 200:
+#        print(resp.status_code)
+#        return None
 
-    if resp.status_code != 200:
-        print(resp.status_code)
-        return None
+#    return json.loads(resp.text)[0]
 
-    return json.loads(resp.text)[0]
+@dataclass
+class Metric:
+    Value: float
+    Unit: str
+    UnitType: int
+
+#@dataclass
+#class Imperial:
+#    Value: float
+#    Unit: str
+#    UnitType: int
+
+@dataclass
+class Weather:
+    LocalObservationDateTime: str
+    EpochTime: int
+    WeatherText: str
+    WeatherIcon: int
+#    PrecipitationType: NoneType
+    IsDayTime: bool
+    Temperature: Metric
+
+data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}}
+
+conditions: Weather = dacite.from_dict(Weather,data)
+print(conditions)
 
 
-def get_weather(d):
-    for k, v in d.items():
-        if type(v) == dict:
-            for kk, vv in v.items():
-                if type(vv) == dict:
-                    for kkk, vvv in v.items():
-                        print('{} -> {}'.format(kkk, vvv))
-                else:
-                    print('{} -> {}'.format(kk, vv))
-
-        else:
-            print('{} -> {}'.format(k, v))
+    
     
 
 def run():
