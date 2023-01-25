@@ -40,26 +40,25 @@ def get_locations(url):
 
 #def make_request(url):
 #    print("make_request()")
-##    resp = requests.get(url)
+#    resp = requests.get(url)
 #
 #    if resp.status_code != 200:
 #        print(resp.status_code)
 #        return None
-
+#
 #    return json.loads(resp.text)[0]
 
 @dataclass
-class Metric:
+class Temp:
     Value: float
     Unit: str
     UnitType: int
 
-#@dataclass
-#class Imperial:
-#    Value: float
-#    Unit: str
-#    UnitType: int
-
+@dataclass
+class Temperature:
+    Metric: Temp
+    Imperial: Temp
+    
 @dataclass
 class Weather:
     LocalObservationDateTime: str
@@ -68,9 +67,9 @@ class Weather:
     WeatherIcon: int
 #    PrecipitationType: NoneType
     IsDayTime: bool
-    Temperature: Metric
+    Temperature: Temperature
 
-data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}}
+data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Metric': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}, 'Imperial': {'Value': 44.0, 'Unit': 'F', 'UnitType': 18}}, 'MobileLink': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us', 'Link': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us'}
 
 conditions: Weather = dacite.from_dict(Weather,data)
 print(conditions)
