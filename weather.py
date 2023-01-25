@@ -2,6 +2,7 @@
 
 import json
 import requests
+import sys
 
 
 # get_locations() accepts a url as a parameter and returns a dictionary
@@ -34,25 +35,38 @@ def get_locations(url):
 
     return d
 
-def get_weather(url):
+
+def make_request(url):
+    print("make_request()")
     resp = requests.get(url)
 
     if resp.status_code != 200:
         print(resp.status_code)
         return None
-    
-    e = {}
 
-    output = json.loads(resp.text)[0]
-    e = json.loads(resp.text)[0]
-    return e
+    return json.loads(resp.text)[0]
+
+
+def get_weather(d):
+    for k, v in d.items():
+        if type(v) == dict:
+            for kk, vv in v.items():
+                if type(vv) == dict:
+                    for kkk, vvv in v.items():
+                        print('{} -> {}'.format(kkk, vvv))
+                else:
+                    print('{} -> {}'.format(kk, vv))
+
+        else:
+            print('{} -> {}'.format(k, v))
+    
 
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    apikey = 'L2oOt2u6LGHbNUMVOE4dKlM2hiLcOlJU'
+    apikey = 'jeWkYxYA6jThydPhSUUv0mXUEcFkngqz'
 
-# Region
+    # Region
     regions_path = 'locations/v1/regions/'
 
     regions = get_locations('{}/{}?apikey={}'.format(
@@ -61,9 +75,9 @@ def run():
     region_code = (regions['Europe'])
     print ("Region = " + region_code)
 
-# if user use lower case,  we could add all the locations to the dict in lower-case, then convert
+    # if user use lower case,  we could add all the locations to the dict in lower-case, then convert
 
-# Country
+    # Country
     countries_path = 'locations/v1/countries/'
 
     countries = get_locations('{}/{}/{}?apikey={}'.format(
@@ -72,7 +86,7 @@ def run():
     country_code = (countries['Italy'])
     print ("Country = " + country_code)
 
-# Admin area
+    # Admin area
     admin_areas_path = 'locations/v1/adminareas'
 
     admin_areas = get_locations('{}/{}?apikey={}'.format(
@@ -81,15 +95,20 @@ def run():
     admin_area_code = (admin_areas['Leeds'])
     print (admin_area_code)
 
-# Current conditions url http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
+    # Current conditions url http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
 
     conditions_path = 'currentconditions/v1'
     location_key = '712327'
 
-    weather = get_weather('{}/{}/{}?apikey={}'.format(
-        api_endpoint, conditions_path, location_key, apikey))
+    url = '{}/{}/{}?apikey={}'.format(
+        api_endpoint, conditions_path, location_key, apikey)
 
-    current_weather = (weather['Temperature']['Metric']['Value'])
+    out = make_request(url)
+    
+    get_weather(out)
+    sys.exit(0)
+
+    current_weather = (weather['WeatherText'])
     print (current_weather)
 
     return
