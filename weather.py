@@ -10,43 +10,39 @@ import sys
 # get_locations() accepts a url as a parameter and returns a dictionary
 # of locations.
 def get_locations(url):
-    # Make the http requests to the url.
     resp = requests.get(url)
 
-    # If the resonse status code is not 200, then return nothing.
-    # TODO: We might want log an error here.
-    # Also worth consdering the behaviour here if the url is unreachable, and
-    # how we handle different status codes.
     if resp.status_code != 200:
         print(resp.status_code)
         return None
 
-    # Initialise an empty dictionary.
     d = {}
 
-    # resp.text is a json object that is a list. And when we pass it into
-    # json.loads() we get a list.
-    # Here we are literally saying: for each item in the list that we have
-    # created from the json object, d's key is the value of 'LocalizedName',
-    # and d's value is the value of 'ID'. This allows us to get the ID
-    # from the human readable name.
-    # This is creating a dictionary, which is easier to get values from, rather
-    # than iterating over a list.
     for item in json.loads(resp.text):
         d[item['LocalizedName']] = item['ID']
 
     return d
 
 
-#def make_request(url):
-#    print("make_request()")
-#    resp = requests.get(url)
-#
-#    if resp.status_code != 200:
-#        print(resp.status_code)
-#        return None
-#
-#    return json.loads(resp.text)[0]
+def make_request(url):
+    print("make_request()")
+    resp = requests.get(url)
+
+    if resp.status_code != 200:
+        print(resp.status_code)
+        return None
+
+    return json.loads(resp.text)[0]
+
+@dataclass
+class Location:
+    Key: str
+
+data = {"Version":1,"Key":"712327","Type":"City","Rank":35,"LocalizedName":"Leeds","EnglishName":"Leeds","PrimaryPostalCode":"LS1 6","Region":{"ID":"EUR","LocalizedName":"Europe","EnglishName":"Europe"},"Country":{"ID":"GB","LocalizedName":"United Kingdom","EnglishName":"United Kingdom"},"AdministrativeArea":{"ID":"LDS","LocalizedName":"Leeds","EnglishName":"Leeds","Level":1,"LocalizedType":"Metropolitan Borough","EnglishType":"Metropolitan Borough","CountryID":"GB"},"TimeZone":{"Code":"GMT","Name":"Europe/London","GmtOffset":0.0,"IsDaylightSaving":False,"NextOffsetChange":"2023-03-26T01:00:00Z"},"GeoPosition":{"Latitude":53.798,"Longitude":-1.542,"Elevation":{"Metric":{"Value":67.0,"Unit":"m","UnitType":5},"Imperial":{"Value":219.0,"Unit":"ft","UnitType":0}}},"IsAlias":False,"SupplementalAdminAreas":[{"Level":0,"LocalizedName":"England","EnglishName":"England"}],"DataSets":["AirQualityCurrentConditions","AirQualityForecasts","Alerts","DailyPollenForecast","ForecastConfidence","FutureRadar","MinuteCast","Radar"]} 
+
+location: Location = dacite.from_dict(Location,data)
+location_key = location.Key
+print(location_key)
 
 @dataclass
 class Temp:
@@ -68,49 +64,44 @@ class Weather:
 #    PrecipitationType: NoneType
     IsDayTime: bool
     Temperature: Temperature
+    MobileLink: str
+    Link: str
 
 data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Metric': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}, 'Imperial': {'Value': 44.0, 'Unit': 'F', 'UnitType': 18}}, 'MobileLink': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us', 'Link': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us'}
 
 conditions: Weather = dacite.from_dict(Weather,data)
-print(conditions)
+print(conditions.WeatherText)
 
-
-    
-    
 
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
     apikey = 'jeWkYxYA6jThydPhSUUv0mXUEcFkngqz'
 
-    # Region
-    regions_path = 'locations/v1/regions/'
+    # If user uses lower case,  we could add all the locations to the dict in lower-case, 
+    # then convert
 
-    regions = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, regions_path, apikey))
+    # Search url wget "http://dataservice.accuweather.com/locations/v1/cities/search?apikey=jeWkYxYA6jThydPhSUUv0mXUEcFkngqz&q=Leeds LDS"
 
-    region_code = (regions['Europe'])
-    print ("Region = " + region_code)
-
-    # if user use lower case,  we could add all the locations to the dict in lower-case, then convert
-
-    # Country
-    countries_path = 'locations/v1/countries/'
-
-    countries = get_locations('{}/{}/{}?apikey={}'.format(
-        api_endpoint, countries_path, region_code, apikey))
+    # City
+    city_path = 'locations/v1/cities/search'
     
-    country_code = (countries['Italy'])
+    search = 'Leeds LDS'
+
+    locations = get_locations('{}/{}?apikey={}&q={}'.format(
+        api_endpoint, city_path,  apikey, search ))
+    
+    location = (countries['Italy'])
     print ("Country = " + country_code)
 
-    # Admin area
-    admin_areas_path = 'locations/v1/adminareas'
-
-    admin_areas = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, admin_areas_path, apikey))
-    
-    admin_area_code = (admin_areas['Leeds'])
-    print (admin_area_code)
+#    # Admin area
+#    admin_areas_path = 'locations/v1/adminareas'
+#
+#    admin_areas = get_locations('{}/{}?apikey={}'.format(
+#        api_endpoint, admin_areas_path, apikey))
+#    
+#    admin_area_code = (admin_areas['Leeds'])
+#    print (admin_area_code)
 
     # Current conditions url http://dataservice.accuweather.com/currentconditions/v1/712327?apikey=Y1HInAn84tkJVg1goICCfpgb2396Kq5t
 
