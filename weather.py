@@ -58,7 +58,7 @@ class Weather:
     EpochTime: int
     WeatherText: str
     WeatherIcon: int
-#    PrecipitationType: NoneType
+#    PrecipitationType: str
     HasPrecipitation: bool
     IsDayTime: bool
     Temperature: Temperature
@@ -67,10 +67,6 @@ class Weather:
 
 #data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Metric': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}, 'Imperial': {'Value': 44.0, 'Unit': 'F', 'UnitType': 18}}, 'MobileLink': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us', 'Link': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us'}
 
-#conditions: Weather = dacite.from_dict(Weather,data)
-#print(conditions.WeatherText)
-
-
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
@@ -78,11 +74,9 @@ def run():
 
     # If user uses lower case,  we could add all the locations to the dict in lower-case, 
     # then convert
-
-    # Search url wget "http://dataservice.accuweather.com/locations/v1/cities/search?apikey=jeWkYxYA6jThydPhSUUv0mXUEcFkngqz&q=Leeds LDS"
     
     # Location to get the weather for
-    city = 'New York'
+    city = 'Algiers'
     # Admin area
     admin_areas_path = 'locations/v1/adminareas'
 
@@ -121,9 +115,9 @@ def run():
     print("Date: " + str(date))
     time_long = (date_time_list[1])
     time_list = time_long.split(":")
-    time_1 = (time_list[0])
-    time_2 = (time_list[1])
-    print("Time: " + str(time_1) + ":" + str(time_2) + "hrs")
+    time_hrs = (time_list[0])
+    time_mins = (time_list[1])
+    print("Time: " + str(time_hrs) + ":" + str(time_mins) + "hrs")
     print("Summary: " + conditions.WeatherText)
     value = conditions.Temperature.Metric.Value
     unit = conditions.Temperature.Metric.Unit
@@ -133,7 +127,7 @@ def run():
     print("Precipitation: " + str(rain))
     
 #    get_weather(out)
-#    sys.exit(0)
+    sys.exit(0)
 
     return
 
