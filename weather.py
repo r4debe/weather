@@ -41,10 +41,6 @@ class Location:
 
 #data = {"Version":1,"Key":"712327","Type":"City","Rank":35,"LocalizedName":"Leeds","EnglishName":"Leeds","PrimaryPostalCode":"LS1 6","Region":{"ID":"EUR","LocalizedName":"Europe","EnglishName":"Europe"},"Country":{"ID":"GB","LocalizedName":"United Kingdom","EnglishName":"United Kingdom"},"AdministrativeArea":{"ID":"LDS","LocalizedName":"Leeds","EnglishName":"Leeds","Level":1,"LocalizedType":"Metropolitan Borough","EnglishType":"Metropolitan Borough","CountryID":"GB"},"TimeZone":{"Code":"GMT","Name":"Europe/London","GmtOffset":0.0,"IsDaylightSaving":False,"NextOffsetChange":"2023-03-26T01:00:00Z"},"GeoPosition":{"Latitude":53.798,"Longitude":-1.542,"Elevation":{"Metric":{"Value":67.0,"Unit":"m","UnitType":5},"Imperial":{"Value":219.0,"Unit":"ft","UnitType":0}}},"IsAlias":False,"SupplementalAdminAreas":[{"Level":0,"LocalizedName":"England","EnglishName":"England"}],"DataSets":["AirQualityCurrentConditions","AirQualityForecasts","Alerts","DailyPollenForecast","ForecastConfidence","FutureRadar","MinuteCast","Radar"]} 
 
-#location: Location = dacite.from_dict(Location,locations)
-#location_key = location.Key
-#print(location_key)
-
 @dataclass
 class Temp:
     Value: float
