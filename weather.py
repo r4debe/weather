@@ -77,17 +77,27 @@ class Weather:
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    apikey = 'kWVZrARj3pEVRX44COsxZkNOuVeqa3Ah'
+    apikey = 'JW6OsqYANESkGGiZWw4TEANxP0tWMKVZ'
 
     # If user uses lower case,  we could add all the locations to the dict in lower-case, 
     # then convert
 
     # Search url wget "http://dataservice.accuweather.com/locations/v1/cities/search?apikey=jeWkYxYA6jThydPhSUUv0mXUEcFkngqz&q=Leeds LDS"
 
+    # Admin area
+    admin_areas_path = 'locations/v1/adminareas'
+
+    admin_areas = get_locations('{}/{}?apikey={}'.format(
+        api_endpoint, admin_areas_path, apikey))
+
+    admin_area_code = (admin_areas['Leeds'])
+
     # City
     city_path = 'locations/v1/cities/search'
     
-    search = 'Leeds LDS'
+    city = 'Leeds'
+    search = '{} {}'.format(
+            city, admin_area_code)
 
     url = '{}/{}?apikey={}&q={}'.format(
         api_endpoint, city_path,  apikey, search )
@@ -96,7 +106,6 @@ def run():
 
     location: Location = dacite.from_dict(Location,locations)
     location_key = location.Key
-    
      
     # Conditions
     conditions_path = 'currentconditions/v1'
@@ -106,7 +115,7 @@ def run():
 
     out = make_request(url)
     conditions: Weather = dacite.from_dict(Weather,out)
-    print("The Current Conditions are:")
+    print("The Current Conditions for "+ city + " are:")
     print("Local Date / Time: " + conditions.LocalObservationDateTime)
     print("Summary: " + conditions.WeatherText)
     value = conditions.Temperature.Metric.Value
