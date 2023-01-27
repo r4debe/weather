@@ -126,4 +126,3 @@ def run():
 # If our app is not running as a module, then call the run() fuction.
 if __name__ == '__main__':
     run()
-
