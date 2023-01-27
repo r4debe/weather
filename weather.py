@@ -84,9 +84,10 @@ def run():
     # then convert
 
     # Search url wget "http://dataservice.accuweather.com/locations/v1/cities/search?apikey=jeWkYxYA6jThydPhSUUv0mXUEcFkngqz&q=Leeds LDS"
-
+    
+    # Location to get the weather for
+    city = 'New York'
     # Admin area
-    city = 'Manchester'
     admin_areas_path = 'locations/v1/adminareas'
 
     admin_areas = get_locations('{}/{}?apikey={}'.format(
@@ -97,7 +98,6 @@ def run():
     # City
     city_path = 'locations/v1/cities/search'
     
-#    city = 'Leeds'
     search = '{} {}'.format(
             city, admin_area_code)
 
