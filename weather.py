@@ -78,7 +78,7 @@ class Weather:
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    apikey = 'JW6OsqYANESkGGiZWw4TEANxP0tWMKVZ'
+    apikey = 'AULRDZdAseJJ1AAYcdlbPgG0UuChV5f9'
 
     # If user uses lower case,  we could add all the locations to the dict in lower-case, 
     # then convert
@@ -119,7 +119,14 @@ def run():
 
     print("The Current Conditions for " + location.LocalizedName +  " are:")
     date_time = conditions.LocalObservationDateTime
-    print("Local Date / Time: " + conditions.LocalObservationDateTime)
+    date_time_list = date_time.split("T")
+    date = (date_time_list[0])
+    print("Date: " + str(date))
+    time_long = (date_time_list[1])
+    time_list = time_long.split(":")
+    time_1 = (time_list[0])
+    time_2 = (time_list[1])
+    print("Time: " + str(time_1) + ":" + str(time_2) + "hrs")
     print("Summary: " + conditions.WeatherText)
     value = conditions.Temperature.Metric.Value
     unit = conditions.Temperature.Metric.Unit
