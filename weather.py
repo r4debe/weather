@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from dataclasses import dataclass
+from datetime import datetime
 import dacite
 import json
 import requests
@@ -70,13 +71,13 @@ class Weather:
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    apikey = 'AULRDZdAseJJ1AAYcdlbPgG0UuChV5f9'
+    apikey = '4bAzYrckrKgStAXpCiekZLyvkAGkHLmG'
 
     # If user uses lower case,  we could add all the locations to the dict in lower-case, 
     # then convert
     
     # Location to get the weather for
-    city = 'Algiers'
+    city = 'York'
     # Admin area
     admin_areas_path = 'locations/v1/adminareas'
 
@@ -125,6 +126,12 @@ def run():
     print("Temperature: " + temp)
     rain =  conditions.HasPrecipitation
     print("Precipitation: " + str(rain))
+    daylight = conditions.IsDayTime
+    if(daylight == True):
+        print("Its daytime")
+    elif(daylight == False):
+        print("Its night")
+    
     
 #    get_weather(out)
     sys.exit(0)
