@@ -1,12 +1,44 @@
 #!/usr/bin/env python3
 
 from dataclasses import dataclass
-from datetime import datetime
+import datetime
 import dacite
 import json
 import requests
 import sys
+import os
 
+
+
+@dataclass
+class Location:
+    Key: str
+    LocalizedName: str
+
+@dataclass
+class Temp:
+    Value: float
+    Unit: str
+    UnitType: int
+
+@dataclass
+class Temperature:
+    Metric: Temp
+    Imperial: Temp
+    
+@dataclass
+class Weather:
+    LocalObservationDateTime: str
+    EpochTime: int
+    WeatherText: str
+    WeatherIcon: int
+    #PrecipitationType: str
+    HasPrecipitation: bool
+    IsDayTime: bool
+    Temperature: Temperature
+    MobileLink: str
+    Link: str
+    
 
 # get_locations() accepts a url as a parameter and returns a dictionary
 # of locations.
@@ -26,7 +58,7 @@ def get_locations(url):
 
 
 def make_request(url):
-#    print("making_request()")
+    #print("making_request()")
     resp = requests.get(url)
 
     if resp.status_code != 200:
@@ -35,107 +67,80 @@ def make_request(url):
 
     return json.loads(resp.text)[0]
 
-@dataclass
-class Location:
-    Key: str
-    LocalizedName: str
-
-#data = {"Version":1,"Key":"712327","Type":"City","Rank":35,"LocalizedName":"Leeds","EnglishName":"Leeds","PrimaryPostalCode":"LS1 6","Region":{"ID":"EUR","LocalizedName":"Europe","EnglishName":"Europe"},"Country":{"ID":"GB","LocalizedName":"United Kingdom","EnglishName":"United Kingdom"},"AdministrativeArea":{"ID":"LDS","LocalizedName":"Leeds","EnglishName":"Leeds","Level":1,"LocalizedType":"Metropolitan Borough","EnglishType":"Metropolitan Borough","CountryID":"GB"},"TimeZone":{"Code":"GMT","Name":"Europe/London","GmtOffset":0.0,"IsDaylightSaving":False,"NextOffsetChange":"2023-03-26T01:00:00Z"},"GeoPosition":{"Latitude":53.798,"Longitude":-1.542,"Elevation":{"Metric":{"Value":67.0,"Unit":"m","UnitType":5},"Imperial":{"Value":219.0,"Unit":"ft","UnitType":0}}},"IsAlias":False,"SupplementalAdminAreas":[{"Level":0,"LocalizedName":"England","EnglishName":"England"}],"DataSets":["AirQualityCurrentConditions","AirQualityForecasts","Alerts","DailyPollenForecast","ForecastConfidence","FutureRadar","MinuteCast","Radar"]} 
-
-@dataclass
-class Temp:
-    Value: float
-    Unit: str
-    UnitType: int
-
-@dataclass
-class Temperature:
-    Metric: Temp
-    Imperial: Temp
-    
-@dataclass
-class Weather:
-    LocalObservationDateTime: str
-    EpochTime: int
-    WeatherText: str
-    WeatherIcon: int
-#    PrecipitationType: str
-    HasPrecipitation: bool
-    IsDayTime: bool
-    Temperature: Temperature
-    MobileLink: str
-    Link: str
 
 #data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Metric': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}, 'Imperial': {'Value': 44.0, 'Unit': 'F', 'UnitType': 18}}, 'MobileLink': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us', 'Link': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us'}
 
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
-    apikey = '4bAzYrckrKgStAXpCiekZLyvkAGkHLmG'
+    apikey = os.getenv('ACCUWEATHER_API_KEY')
+   # apikey = 'hcjJMET97VUKFeXQ0ISs3n5Cy5c3RBuR'
 
     # If user uses lower case,  we could add all the locations to the dict in lower-case, 
     # then convert
     
     # Location to get the weather for
-    city = 'York'
+    city = 'Leeds'
     # Admin area
-    admin_areas_path = 'locations/v1/adminareas'
+    admin_areas = get_locations('{}/locations/v1/adminareas?apikey={}'.format(
+        api_endpoint, apikey))
 
-    admin_areas = get_locations('{}/{}?apikey={}'.format(
-        api_endpoint, admin_areas_path, apikey))
-
-    admin_area_code = (admin_areas[(city)])
+    admin_area_code = admin_areas[city]
 
     # City
-    city_path = 'locations/v1/cities/search'
-    
     search = '{} {}'.format(
-            city, admin_area_code)
+        city, admin_area_code)
 
-    url = '{}/{}?apikey={}&q={}'.format(
-        api_endpoint, city_path,  apikey, search )
+    location_url = '{}/locations/v1/cities/search?apikey={}&q={}'.format(
+        api_endpoint, apikey, search )
     
-    locations = make_request(url)
+    locations = make_request(location_url)
 
     location: Location = dacite.from_dict(Location,locations)
+
     location_key = location.Key
 
     # Conditions
-    conditions_path = 'currentconditions/v1'
+    conditions_url = '{}/currentconditions/v1/{}?apikey={}'.format(
+        api_endpoint, location_key, apikey)
 
-    url = '{}/{}/{}?apikey={}'.format(
-        api_endpoint, conditions_path, location_key, apikey)
+    conditions = make_request(conditions_url)
 
-    out = make_request(url)
-    conditions: Weather = dacite.from_dict(Weather,out)
+    conditions: Weather = dacite.from_dict(Weather,conditions)
 
+    # Print title with location
     print("The Current Conditions for " + location.LocalizedName +  " are:")
-    date_time = conditions.LocalObservationDateTime
-    date_time_list = date_time.split("T")
-    date = (date_time_list[0])
-    print("Date: " + str(date))
-    time_long = (date_time_list[1])
-    time_list = time_long.split(":")
-    time_hrs = (time_list[0])
-    time_mins = (time_list[1])
-    print("Time: " + str(time_hrs) + ":" + str(time_mins) + "hrs")
+
+    
+    date = conditions.LocalObservationDateTime.split("T")[0]
+    print("Date :" + str(date))
+
+    print(conditions.LocalObservationDateTime)
+
+    time_hrs = conditions.LocalObservationDateTime.split("T")[1].split(':')[0]
+    time_mins = conditions.LocalObservationDateTime.split("T")[1].split(':')[1]
+    print("Time: " + str(time_hrs) + ":" + str(time_mins))
+
     print("Summary: " + conditions.WeatherText)
+
     value = conditions.Temperature.Metric.Value
     unit = conditions.Temperature.Metric.Unit
     temp = str(value) + unit
     print("Temperature: " + temp)
+
     rain =  conditions.HasPrecipitation
     print("Precipitation: " + str(rain))
-    daylight = conditions.IsDayTime
-    if(daylight == True):
-        print("Its daytime")
-    elif(daylight == False):
-        print("Its night")
-    
-    
-#    get_weather(out)
-    sys.exit(0)
 
+    daylight = conditions.IsDayTime
+
+    if daylight:
+        print("It's daytime")
+        return
+
+    print("It's night")
+    return
+    
+    
     return
 
 # If our app is not running as a module, then call the run() fuction.
