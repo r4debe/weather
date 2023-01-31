@@ -74,7 +74,6 @@ def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
     apikey = os.getenv('ACCUWEATHER_API_KEY')
-   # apikey = 'hcjJMET97VUKFeXQ0ISs3n5Cy5c3RBuR'
 
     # If user uses lower case,  we could add all the locations to the dict in lower-case, 
     # then convert
