@@ -89,6 +89,7 @@ def run():
 
     admin_area_code = admin_areas[city]
 
+
     # City
     search = '{} {}'.format(
         city, admin_area_code)
@@ -102,6 +103,7 @@ def run():
 
     location_key = location.Key
 
+
     # Conditions
     conditions_url = '{}/currentconditions/v1/{}?apikey={}'.format(
         api_endpoint, location_key, apikey)
@@ -109,6 +111,7 @@ def run():
     conditions = make_request(conditions_url)
 
     conditions: Weather = dacite.from_dict(Weather,conditions)
+
 
     # Print title with location
     print("The Current Conditions for " + location.LocalizedName +  " are:")
