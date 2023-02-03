@@ -8,7 +8,10 @@ import requests
 import sys
 import os
 
-
+@dataclass
+class Area:
+    ID: str
+    LocalizedName: str
 
 @dataclass
 class Location:
@@ -68,8 +71,6 @@ def make_request(url):
     return json.loads(resp.text)[0]
 
 
-#data = {'LocalObservationDateTime': '2023-01-24T20:03:00+00:00', 'EpochTime': 1674590580, 'WeatherText': 'Mostly cloudy', 'WeatherIcon': 38, 'HasPrecipitation': False, 'PrecipitationType': None, 'IsDayTime': False, 'Temperature': {'Metric': {'Value': 6.7, 'Unit': 'C', 'UnitType': 17}, 'Imperial': {'Value': 44.0, 'Unit': 'F', 'UnitType': 18}}, 'MobileLink': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us', 'Link': 'http://www.accuweather.com/en/gb/leeds/ls1-6/current-weather/712327?lang=en-us'}
-
 def run():
     api_endpoint = 'https://dataservice.accuweather.com'
 
@@ -80,7 +81,9 @@ def run():
     
     # Location to get the weather for
     city = 'Leeds'
+
     # Admin area
+    
     admin_areas = get_locations('{}/locations/v1/adminareas?apikey={}'.format(
         api_endpoint, apikey))
 
@@ -112,9 +115,7 @@ def run():
 
     
     date = conditions.LocalObservationDateTime.split("T")[0]
-    print("Date :" + str(date))
-
-    print(conditions.LocalObservationDateTime)
+    print("Date: " + str(date))
 
     time_hrs = conditions.LocalObservationDateTime.split("T")[1].split(':')[0]
     time_mins = conditions.LocalObservationDateTime.split("T")[1].split(':')[1]
