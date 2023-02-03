@@ -116,7 +116,6 @@ def run():
     # Print title with location
     print("The Current Conditions for " + location.LocalizedName +  " are:")
 
-    
     date = conditions.LocalObservationDateTime.split("T")[0]
     print("Date: " + str(date))
 
