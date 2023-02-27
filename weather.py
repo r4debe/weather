@@ -31,17 +31,18 @@ class Temperature:
     
 @dataclass
 class Weather:
-    LocalObservationDateTime: str
-    EpochTime: int
-    WeatherText: str
-    WeatherIcon: int
-    #PrecipitationType: str
-    HasPrecipitation: bool
-    IsDayTime: bool
-    Temperature: Temperature
-    MobileLink: str
-    Link: str
-    
+    def __init__(self, LocalObservationDataTime, EpochTime, WeatherText, WeatherIcon, HasPrecioitation, IsDayTime, Temperature, MobileLink, Link):
+        self.LocalObservationDateTime: str
+        self.EpochTime: int
+        self.WeatherText: str
+        self.WeatherIcon: int
+        #PrecipitationType: str
+        self.asPrecipitation: bool
+        self.IsDayTime: bool
+        self.Temperature: Temperature
+        self.MobileLink: str
+        self.Link: str
+
 
 # get_locations() accepts a url as a parameter and returns a dictionary
 # of locations.
@@ -61,7 +62,6 @@ def get_locations(url):
 
 
 def make_request(url):
-    #print("making_request()")
     resp = requests.get(url)
 
     if resp.status_code != 200:
@@ -114,6 +114,7 @@ def run():
 
 
     # Print title with location
+    print(Weather.WeatherText)
     print("The Current Conditions for " + location.LocalizedName +  " are:")
 
     date = conditions.LocalObservationDateTime.split("T")[0]
