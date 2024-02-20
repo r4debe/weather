@@ -9,6 +9,7 @@ import sys
 import os
 
 def get_geo_loc(url):
+    print(url)
     headers = CaseInsensitiveDict()
     headers["Accept"] = "application/json"
     resp = requests.get(url, headers=headers)
@@ -20,13 +21,13 @@ def get_geo_loc(url):
     location_data = {}
 
     data = json.loads(resp.text)
-
-    coordinates = data['features'][0]['geometry']['coordinates']
-    longitude, latitude = coordinates
+    print(data)
+    lon = data['results'][0]['lon']
+    lat = data['results'][0]['lat']
 
 # Storing the coordinates in the location_data dictionary
-    location_data['longitude'] = longitude
-    location_data['latitude'] = latitude
+    location_data['lon'] = lon
+    location_data['lat'] = lat
 
     return location_data
 
@@ -57,21 +58,25 @@ def run():
     geo_api_endpoint = 'https://api.geoapify.com'
     house_num = '10'
     street_1 = 'Henrietta'
-    street_2 = 'Street'
+    street_2 = 'street'
     town = 'Whitby'
-    postcode_1 = 'YO22'
-    postcode_2 = '4DW'
-#    country_1 = 'United'
-#    country_2 = 'Kingdom'
+    postcode_1 = 'YO22 4WD'
+    # postcode_2 = '4DW'
+    country_1 = 'United'
+    country_2 = 'Kingdom'
+     
+    coordinates = get_geo_loc('{}/v1/geocode/search?housenumber={}&street={}%20{}%20&postcode={}&city={}&country={}%20{}%20&lang=en&limit=5&format=json&apiKey={}'.format(
+        geo_api_endpoint, house_num, street_1, street_2, postcode_1, town, country_1, country_2, geo_api_key))
 
-    coordinates = get_geo_loc('{}/v1/geocode/search?text={}%20{}%20{}%2C%20{}%20{}H%20{}&apiKey={}'.format(
-        geo_api_endpoint, house_num, street_1, street_2, town, postcode_1, postcode_2, geo_api_key))
-
+    # coordinates = get_geo_loc('{}/v1/geocode/search?text={}%20{}%20{}%2C%20{}%20{}H%20{}&apiKey={}'.format(
+    #     geo_api_endpoint, house_num, street_1, street_2, town, postcode_1, postcode_2, geo_api_key))
     print(coordinates) 
 
+    # https://api.geoapify.com/v1/geocode/search?housenumber=1214-1224&street=West%20Van%20Buren%20Street&postcode=60607&city=Chicago&country=United%20States%20of%20America&lang=en&limit=5&format=json&apiKey=YOUR_API_KEY
+
     weather_api_endpoint = 'https://archive-api.open-meteo.com'
-    latitude = coordinates['latitude']
-    longitude = coordinates['longitude']
+    latitude = coordinates['lat']
+    longitude = coordinates['lon']
     start_date = '2023-12-31'
     end_date = '2024-01-01'
     weather_metric = 'temperature_2m'
