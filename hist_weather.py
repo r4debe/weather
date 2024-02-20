@@ -80,7 +80,7 @@ def run():
         weather_api_endpoint, latitude, longitude, start_date, end_date, weather_metric))
 
     for time, temp in zip(time_list['time'], temp_list['temps']):
-        print("Time:", time, "| Temperature:", temp)
+        print("Time:", time, "| Temp:", temp, "Latitude: ", latitude, "Longitude: ", longitude)
 
 if __name__ == '__main__':
     run()
